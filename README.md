@@ -1,75 +1,59 @@
 # Open in Devin Review
 
-A small browser extension that adds an **Open in Devin Review** button to GitHub
-pull request pages. Clicking it opens the same PR on `devinreview.com` in a new
-tab.
+A tiny browser extension that adds an **Open in Devin Review** button to GitHub
+pull request pages. One click opens the same PR on
+[devinreview.com](https://devinreview.com) in a new tab — no copy-pasting URLs.
 
-The repo contains one self-contained extension per browser:
-
-- `firefox/` — Firefox (Manifest V3, signed via AMO)
-- `chrome/` — Chrome (Manifest V3, for Chrome Web Store)
-
-`content.js` / `content.css` are currently duplicated in each directory because
-extension files must live inside the extension root. `tools/make_icons.py`
-regenerates the PNG icons for both.
+Works in Firefox and Chrome.
 
 ## Firefox
 
-### Temporary (for testing)
+### Quick install (permanent)
 
-1. Open `about:debugging` in Firefox.
-2. Click **This Firefox** → **Load Temporary Add-on**.
-3. Select `firefox/manifest.json`.
+1. Download the latest `.xpi` file from the
+   [Releases](https://github.com/dreispt/devin-review-extension/releases)
+   page.
+2. Open it with Firefox (or drag it onto `about:addons`).
+3. Confirm the install when prompted.
 
-### Permanent (self-distributed)
+### Temporary install (for testing)
 
-Firefox requires all permanently installed extensions to be signed by
-addons.mozilla.org (AMO), but the add-on does **not** need to be publicly
-listed. This repository includes a GitHub Actions workflow that submits the
-extension in `firefox/` to AMO's **unlisted** channel on every `v*` tag and
-attaches the signed `.xpi` to the GitHub release. Users install it permanently
-by downloading the `.xpi` from a release.
+1. Download or clone this repository.
+2. Open `about:debugging` in Firefox.
+3. Click **This Firefox** → **Load Temporary Add-on**.
+4. Select `firefox/manifest.json`.
 
-#### One-time setup
-
-1. Create an AMO account at <https://addons.mozilla.org/developers/>.
-2. Generate API credentials at
-   <https://addons.mozilla.org/developers/addon/api/key/>.
-3. Add them as repository secrets (Settings → Secrets and variables → Actions):
-   - `AMO_JWT_ISSUER` — the JWT issuer (your AMO email)
-   - `AMO_JWT_SECRET` — the JWT secret
-
-#### Cutting a release
-
-1. Bump `version` in `firefox/manifest.json` **and** `chrome/manifest.json`
-   (AMO rejects re-uploading an existing version).
-2. Commit, then tag: `git tag v0.2.0 && git push origin v0.2.0`.
-3. The workflow signs the Firefox extension and creates a GitHub release with
-   the `.xpi` attached.
+> Temporary add-ons are removed when Firefox restarts. Use the `.xpi` above
+> for a permanent install.
 
 ## Chrome
 
-### Testing
+### Quick install (for testing)
 
-1. Open `chrome://extensions`.
-2. Enable **Developer mode**.
-3. Click **Load unpacked** and select the `chrome/` directory.
+Chrome doesn't offer direct `.zip` installs, so for now:
 
-### Publishing
+1. Download or clone this repository.
+2. Open `chrome://extensions`.
+3. Turn on **Developer mode** (top right).
+4. Click **Load unpacked** and select the `chrome/` folder.
 
-Chrome extensions are distributed through the Chrome Web Store. This requires a
-one-time $5 developer account at
-<https://chrome.google.com/webstore/devconsole>. From there:
+A Chrome Web Store listing is planned — check back here for a one-click
+install link.
 
-1. Click **New item**, upload a zip of the `chrome/` directory.
-2. Fill in the listing (name, description, a 128px icon is already provided).
-3. Submit for review.
+## Usage
 
-For an unlisted/self-hosted distribution, the store also supports **unlisted**
-items — anyone with the link can install, no public listing.
+Open any GitHub pull request (e.g. `github.com/owner/repo/pull/123`). A blue
+**Open in Devin Review** button appears in the bottom-right corner. Click it to
+open the PR on Devin Review in a new tab.
 
-## Development
+## For developers
 
-No build step. Edit `content.js` / `content.css` in the relevant browser
-directory, then reload the extension (`about:debugging` for Firefox,
-`chrome://extensions` for Chrome).
+The repo contains one self-contained extension per browser:
+
+- `firefox/` — Firefox version
+- `chrome/` — Chrome version
+- `tools/` — icon generator (`python3 tools/make_icons.py`)
+
+Releases are cut by tagging a version (e.g. `git tag v0.2.0 && git push origin
+v0.2.0`); a GitHub Action signs the Firefox build via addons.mozilla.org and
+attaches the `.xpi` to the release automatically.
