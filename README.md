@@ -43,8 +43,8 @@ install link.
 ## Usage
 
 Open any GitHub pull request (e.g. `github.com/owner/repo/pull/123`). A blue
-**Open in Devin Review** button appears in the bottom-right corner. Click it to
-open the PR on Devin Review in a new tab.
+**Open in Devin Review** button floats in the bottom-right corner of the
+screen. Click it to open the PR on Devin Review in a new tab.
 
 ## For developers
 
