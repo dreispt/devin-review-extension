@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Open in Devin Review",
+  "version": "0.1.0",
+  "description": "Adds a button on GitHub pull request pages that opens the same PR on devinreview.com in a new tab.",
+  "content_scripts": [
+    {
+      "matches": ["*://github.com/*/pull/*"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "devin-review-button@dreispt",
+      "strict_min_version": "109.0"
+    }
+  }
+}
