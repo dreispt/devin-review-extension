@@ -21,7 +21,7 @@ jobs:
         run: >
           npx --yes web-ext@10.8.0 sign
           --channel=unlisted
-          --source-dir=.
+          --source-dir=firefox
           --artifacts-dir=artifacts
         env:
           WEB_EXT_API_KEY: ${{ secrets.AMO_JWT_ISSUER }}
