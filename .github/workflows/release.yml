@@ -1,0 +1,38 @@
+name: Sign and release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  sign:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Sign extension (unlisted)
+        run: >
+          npx --yes web-ext@10.8.0 sign
+          --channel=unlisted
+          --source-dir=.
+          --artifacts-dir=artifacts
+        env:
+          WEB_EXT_API_KEY: ${{ secrets.AMO_JWT_ISSUER }}
+          WEB_EXT_API_SECRET: ${{ secrets.AMO_JWT_SECRET }}
+
+      - name: Create GitHub release with signed XPI
+        run: >
+          gh release create "${GITHUB_REF_NAME}"
+          artifacts/*.xpi
+          --repo "${GITHUB_REPOSITORY}"
+          --title "${GITHUB_REF_NAME}"
+          --generate-notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
